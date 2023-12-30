@@ -70,6 +70,6 @@
 
     - name: Loading Schema
       ansible.builtin.command: mongo --host mongodb.saachi.online < /app/schema/catalogue.js
-      
+      when: data_cpount.stdout == 0
 
     
