@@ -32,8 +32,8 @@
 
   - name: Installing Dependencies
     ansible.builtin.command: npm install 
-      vars:
-        chdir: /app
+    vars:
+      chdir: /app
 
   - name: creating catalogue service directory
     ansible.builtin.copy:
