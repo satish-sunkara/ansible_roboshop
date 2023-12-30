@@ -32,13 +32,13 @@
 
   - name: Installing Dependencies
     ansible.builtin.command: npm install 
-    vars:
-      chdir: /app
+      vars:
+        chdir: /app
 
   - name: creating catalogue service directory
-      ansible.builtin.copy:
-        src: catalogue.service
-        dest: /etc/systemd/system/catalogue.service
+    ansible.builtin.copy:
+      src: catalogue.service
+      dest: /etc/systemd/system/catalogue.service
 
   - name: daemon-reload
     ansible.builtin.systemd_service:
