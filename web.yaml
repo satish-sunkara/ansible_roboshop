@@ -20,8 +20,8 @@
 
   - name: Download the frontend content
     ansible.builtin.get_url:
-    url: https://roboshop-builds.s3.amazonaws.com/web.zip
-    dest: /tmp/
+      url: https://roboshop-builds.s3.amazonaws.com/web.zip
+      dest: /tmp/
 
   - name: Cteating the html directory
     ansible.builtin.file:
