@@ -61,7 +61,7 @@
         state: present
 
     - name: counting the no.of occurances of schema data
-      ansible.builtin.command: mongo --host mongodb.daws76s.online --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
+      ansible.builtin.command: mongo --host mongodb.saachi.online --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
       register: data_cpount
 
     - name: Printing the count of data
