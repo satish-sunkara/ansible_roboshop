@@ -29,10 +29,11 @@
       url: https://roboshop-builds.s3.amazonaws.com/web.zip
       dest: /tmp/
 
-  # - name: Cteating the html directory
-  #   ansible.builtin.file:
-  #     path: /usr/share/nginx/html
-  #     state: mkdir
+  - name: Creating directory
+      ansible.builtin.file:
+        path: /usr/share/nginx/html
+        state: directory
+
 
   - name: unzipping the code file
     ansible.builtin.unarchive:
