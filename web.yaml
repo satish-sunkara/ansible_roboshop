@@ -13,14 +13,16 @@
       state: started
       enabled: yes
 
-  - name: Remove the default content that web server
+  # - name: Remove the default content that web server
   #   ansible.builtin.file:
   #     path: /usr/share/nginx/html
   #     state:  got: rm -rf
-
-      file: path='/usr/share/nginx/html/{{ item }}' state=absent
-        with_fileglob:
-          - /usr/share/nginx/html/*
+  - name: Remove the default content that web server
+    ansible.builtin.file:
+      state: "{{ item }}"
+      path: "/usr/share/nginx/html"
+    with_items:
+      - absent
 
   - name: Download the frontend content
     ansible.builtin.get_url:
