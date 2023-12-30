@@ -14,19 +14,23 @@
       enabled: yes
 
   - name: Remove the default content that web server
-    ansible.builtin.file:
-      path: /usr/share/nginx/html
-      state: rm -rf
+  #   ansible.builtin.file:
+  #     path: /usr/share/nginx/html
+  #     state:  got: rm -rf
+
+      file: path='/usr/share/nginx/html/{{ item }}' state=absent
+        with_fileglob:
+          - /usr/share/nginx/html/*
 
   - name: Download the frontend content
     ansible.builtin.get_url:
       url: https://roboshop-builds.s3.amazonaws.com/web.zip
       dest: /tmp/
 
-  - name: Cteating the html directory
-    ansible.builtin.file:
-      path: /usr/share/nginx/html
-      state: mkdir
+  # - name: Cteating the html directory
+  #   ansible.builtin.file:
+  #     path: /usr/share/nginx/html
+  #     state: mkdir
 
   - name: unzipping the code file
     ansible.builtin.unarchive:
