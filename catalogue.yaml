@@ -32,7 +32,7 @@
 
   - name: Installing Dependencies
     ansible.builtin.command: npm install 
-    vars:
+    args:
       chdir: /app
 
   - name: creating catalogue service directory
