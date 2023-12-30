@@ -72,4 +72,10 @@
       ansible.builtin.command: mongo --host mongodb.saachi.online < /app/schema/catalogue.js
       when: data_cpount.stdout == 0
 
+    - name: enabling/starting services
+      ansible.builtin.service:
+        name: catalogue
+        state: restarted
+        enabled: yes  
+
     
