@@ -1,5 +1,5 @@
 - name: catalogue
-  hosts: localhost
+  hosts: catalogue
   become: yes
   tasks:
   - name: Disabl Old nodejs and enabling latest nodejs

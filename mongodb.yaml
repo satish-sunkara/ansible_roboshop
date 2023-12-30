@@ -1,5 +1,5 @@
 - name: MOngodb Installation
-  hosts: localhost
+  hosts: mongodb
   become: yes
   tasks:
   - name: copying mongodb repo
