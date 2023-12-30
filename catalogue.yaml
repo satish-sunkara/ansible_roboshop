@@ -60,10 +60,16 @@
         name: mongodb-org-shell
         state: present
 
+    - name: counting the no.of occurances of schema data
+      ansible.builtin.command: mongo --host mongodb.daws76s.online --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
+      register: data_cpount
+
+    - name: Printing the count of data
+      ansible.builtin.debug:
+        msg: "The count is {{data_cpount}}" 
+
     - name: Loading Schema
       ansible.builtin.command: mongo --host mongodb.saachi.online < /app/schema/catalogue.js
-      register: output_count
+      
 
-    - name: printing the output
-      ansible.builtin.debug:
-        msg: "printing the count output {{output_count}}"
+    
