@@ -2,68 +2,68 @@
   hosts: catalogue
   become: yes
   tasks:
-  - name: Disabl Old nodejs and enabling latest nodejs
-    ansible.builtin.shell:  dnf module disable nodejs -y ; dnf module enable nodejs:18 -y
+    - name: Disabl Old nodejs and enabling latest nodejs
+      ansible.builtin.shell: dnf module disable nodejs -y ; dnf module enable nodejs:18 -y
 
-  - name: Install latest NodeJS
-    ansible.builtin.dnf:
-      name: nodejs
-      state: present
+    - name: Install latest NodeJS
+      ansible.builtin.dnf:
+        name: nodejs
+        state: present
 
-  - name: Adding application User
-    ansible.builtin.user:
-      name: roboshop
+    - name: Adding application User
+      ansible.builtin.user:
+        name: roboshop
 
-  - name: Creating directory
-    ansible.builtin.file:
-      path: /app
-      state: directory
+    - name: Creating directory
+      ansible.builtin.file:
+        path: /app
+        state: directory
 
-  - name: Download the application code
-    ansible.builtin.get_url:
-      url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
-      dest: /tmp
+    - name: Download the application code
+      ansible.builtin.get_url:
+        url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
+        dest: /tmp
 
-  - name: Unzip the code
-    ansible.builtin.unarchive:
-      src: /tmp/catalogue.zip
-      dest: /app
-      remote_src: yes
+    - name: Unzip the code
+      ansible.builtin.unarchive:
+        src: /tmp/catalogue.zip
+        dest: /app
+        remote_src: yes
 
-  - name: Installing Dependencies
-    ansible.builtin.command: npm install 
-    args:
-      chdir: /app
+    - name: Installing Dependencies
+      ansible.builtin.command: npm install
+      args:
+        chdir: /app
 
-  - name: creating catalogue service directory
-    ansible.builtin.copy:
-      src: catalogue.service
-      dest: /etc/systemd/system/catalogue.service
+    - name: creating catalogue service directory
+      ansible.builtin.copy:
+        src: catalogue.service
+        dest: /etc/systemd/system/catalogue.service
 
-  - name: daemon-reload
-    ansible.builtin.systemd_service:
-      daemon_reload: true
+    - name: daemon-reload
+      ansible.builtin.systemd_service:
+        daemon_reload: true
 
-  # - name: enabling/starting services
-  #   ansible.builtin.service:
-  #     name: catalogue
-  #     state: restarted
-  #     enabled: yes
+    # - name: enabling/starting services
+    #   ansible.builtin.service:
+    #     name: catalogue
+    #     state: restarted
+    #     enabled: yes
 
-  - name: copying mongodb repo
-    ansible.builtin.copy:
-      src: mongo.repo
-      dest: /etc/yum.repos.d/mongo.repo
+    - name: copying mongodb repo
+      ansible.builtin.copy:
+        src: mongo.repo
+        dest: /etc/yum.repos.d/mongo.repo
 
-  - name: Installing mongodb shell
-    ansible.builtin.dnf:
-      name: mongodb-org-shell
-      state: present
+    - name: Installing mongodb shell
+      ansible.builtin.dnf:
+        name: mongodb-org-shell
+        state: present
 
-  - name: Loading Schema
-    ansible.builtin.command: mongo --host mongodb.saachi.online < /app/schema/catalogue.js
-    register: output_count
+    - name: Loading Schema
+      ansible.builtin.command: mongo --host mongodb.saachi.online < /app/schema/catalogue.js
+      register: output_count
 
-
-
-
+    - name: printing the output
+      ansible.builtin.debug:
+        msg: "printing the count output {{output_count}}"
