@@ -68,7 +68,7 @@
 
   - name: Loading Schema
     ansible.builtin.command: mongo --host mongodb.saachi.online < /app/schema/user.js
-    when: data_count.stdout == "0"  
+    # when: data_count.stdout == "0"  
 
   - name: starting/Enabling of the user services
     ansible.builtin.service:
