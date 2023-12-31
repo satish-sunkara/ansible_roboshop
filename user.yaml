@@ -48,11 +48,37 @@
     ansible.builtin.systemd_service:
       daemon_reload: true
 
+  - name: copying mongodb repo
+      ansible.builtin.copy:
+        src: mongo.repo
+        dest: /etc/yum.repos.d/mongo.repo
+    
+  - name: Installing mongodb shell
+      ansible.builtin.dnf:
+        name: mongodb-org-shell
+        state: present
+
+  - name: counting the no.of occurances of schema data
+      ansible.builtin.command: mongo --host mongodb.saachi.online --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
+      register: data_count
+
+    # - name: Printing the count of data
+    #   ansible.builtin.debug:
+    #     msg: "The count is {{data_count}}" 
+
+    - name: Loading Schema
+      ansible.builtin.command: mongo --host mongodb.saachi.online < /app/schema/user.js
+      when: data_count.stdout == "0"
+
   - name: starting/Enabling of the user services
     ansible.builtin.service:
       name: user
       state: started
       enabled: yes
+
+  
+
+  
 
 
 
