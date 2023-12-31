@@ -1,0 +1,58 @@
+- name: user
+  hosts: user
+  become: yes
+  tasks:
+  - name : disabling old Nodejs and Enabling new version of Nodejs
+    ansible.builtin.shell: dnf module disable nodejs -y ; dnf module enable nodejs:18 -y
+
+  - name: Installing NodeJS
+    ansible.builtin.package:
+      name: nodejs
+      state: present
+
+  - name: Adding application User
+    ansible.builtin.user:
+      name: roboshop
+
+  - name: setup an app directory
+    ansible.builtin.file:
+      path : /app
+      state: absent
+
+  - name: setup an app directory
+    ansible.builtin.file:
+      path : /app
+      state: directory
+
+  - name: Downloading user code file
+    ansible.builtin.get_url:
+      url: https://roboshop-builds.s3.amazonaws.com/user.zip
+      dest: /tmp/user.zip
+
+  - name: unzip/unachive user code file
+    ansible.builtin.unarchive:
+      src: /tmp/user.zip
+      dest: /app
+
+  - name: Installing dependencies
+    ansible.builtin.command: npm install
+    args:
+      chdir: /app
+
+  - name: Settingup SystemD User Service
+    ansible.builtin.copy:
+      src: user.service
+      dest: /etc/systemd/system/user.service
+
+  - name: daemon reload
+    ansible.builtin.systemd_service:
+      daemon_reload: true
+
+  - name: starting/Enabling of the user services
+    ansible.builtin.service:
+      name: user
+      state: started
+      enabled: yes
+
+
+
